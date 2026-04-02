@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Science Learning Platform</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --border-color: #d2d2d7;
+            --accent-color: #0066cc;
+            --hover-bg: #f5f5f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        #searchInput:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Accordion Sections */
+        .section-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 18px;
+            transition: background-color 0.2s ease;
+        }
+
+        .section-header:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+            color: var(--text-muted);
+        }
+
+        .section-card.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            display: none;
+            border-top: 1px solid var(--border-color);
+            padding: 10px 0;
+        }
+
+        .section-card.active .section-content {
+            display: block;
+        }
+
+        /* Entities / Links */
+        .entity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: background-color 0.2s ease;
+        }
+
+        .entity-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .entity-icon {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .entity-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .entity-name {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .entity-type {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: capitalize;
+            margin-top: 2px;
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Computer Science Learning Platform</h1>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for classes, videos, or topics...">
+            </div>
+        </header>
+
+        <div id="course-container">
+            </div>
+        <div id="noResults" class="no-results">No matching content found.</div>
+    </div>
+
+    <script>
+        // The newly provided Computer Science JSON data
+        const apiResponse = {
+            "status": 200,
+            "message": "Success",
+            "data": {
+                "timeline": [
+                    {
+                        "_id": "68e5ee5af1ff9ac7efc025d1",
+                        "name": "⏺️ Live Class Recordings (Mr. Om Sir)",
+                        "sortKey": 1,
+                        "entities": [
+                            {"_id": "1", "name": "Dec 07 | Computer | Introduction to Course | Mr. Om sir", "type": "video", "youtubeURL": "https://youtu.be/2y0HBhe8W0M"},
+                            {"_id": "2", "name": "Dec 08 | Computer | Recent Trends in Technology -01| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/kh8EWbGi_zU"},
+                            {"_id": "3", "name": "Dec 09 | Computer | Recent Trends in Technology-02 | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/r1QOafgPzss"},
+                            {"_id": "4", "name": "Dec 14 | Computer | Recent Trends in Technology -03| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/WOKn_EluonE"},
+                            {"_id": "5", "name": "Dec 15 | Computer | Recent Trends in Technology-04| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/lyZ11ETAC80"},
+                            {"_id": "6", "name": "Dec 19 | Computer | Recent Trends in Technology -05 | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/URIddETDvJU"},
+                            {"_id": "7", "name": "Dec 23 | Data Communication and Networking-01| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/DB2nrzN8Zks"},
+                            {"_id": "8", "name": "Dec 25 | Data Communication and Networking-02| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/mzp1p577Vos"},
+                            {"_id": "9", "name": "Dec 30 | Software Process Models-01| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/J-uSK2dzwhw"},
+                            {"_id": "10", "name": "Jan 02 | Com | Software Process Model-02 | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/EK1keRG9Fz4"},
+                            {"_id": "11", "name": "Jan 13 | Software Process Model-03| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/O2nRqf4af6k"},
+                            {"_id": "12", "name": "Jan 14 | Object-Oriented Programming -01| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/9S6GN264ka0"},
+                            {"_id": "13", "name": "Jan 16 | Object-Oriented Programming-02 | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/Mg2-A8ZVmVw"},
+                            {"_id": "14", "name": "Jan 19 | Object-Oriented Programming-03 | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/XpZvpw5HVHk"},
+                            {"_id": "15", "name": "Jan 20 | Web Technology -01| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/hbZ4PUJ8PpE"},
+                            {"_id": "16", "name": "Jan 26 | Web Technology-02 | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/qRjiOpfSFK4"},
+                            {"_id": "17", "name": "Feb 01 | Web Technology -03| Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/_XUfWGDO5X4"},
+                            {"_id": "18", "name": "Feb 02 | Recent trends and technology | Mr. OM Sir ", "type": "video", "youtubeURL": "https://youtu.be/5_8fHlxO4WQ"},
+                            {"_id": "19", "name": "Feb 03 | Web Technology | HTML and JavaScript Attributes | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/S9V36nuVyDY"},
+                            {"_id": "20", "name": "Feb 04 | JavaScript Enhances Web Functionality | Mr. Om Sir", "type": "video", "youtubeURL": "https://youtu.be/hy81eSiXkPM"}
+                        ]
+                    },
+                    {
+                        "_id": "69ae3531a4dbd9ea76ef130a",
+                        "name": "⏺️ Live Class Recording | Web Development",
+                        "sortKey": 2,
+                        "entities": [
+                            {"_id": "21", "name": "Mar 08 | Computer | Web development | Lec -01 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/1hCO5BX7OEQ"},
+                            {"_id": "22", "name": "Mar 09 | Computer | Web technology |  Event handling and form validation | Lec -02 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/I2DpueoC4fI"},
+                            {"_id": "23", "name": "Mar 10 | Computer | Web technology | Lec -03 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/4O0fHn5dwQU"}
+                        ]
+                    },
+                    {
+                        "_id": "69970a19aa7a2800db97dc96",
+                        "name": "⏺️ Live Class Recording | DBMS | Mr. Anurag Sir",
+                        "sortKey": 3,
+                        "entities": [
+                            {"_id": "24", "name": "Feb 19 | Computer | Data Base Management System | Lec -01 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/Fno2tWaGIXg"},
+                            {"_id": "25", "name": "Feb 20 | Computer | Data Base Management System | Lec -02 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/eKrmKx2QOo4"},
+                            {"_id": "26", "name": "Feb 22 | Computer | Data Base Management System | Lec -03 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/Y0Eu2PUp2uQ"},
+                            {"_id": "27", "name": "Feb 23 | Computer | Data Base Management System | Lec -04 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/Ptw_lz3UUqY"},
+                            {"_id": "28", "name": "Feb 24 | Computer | Data Base Management System | Lec -05 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/8jY1mP4UYMc"},
+                            {"_id": "29", "name": "Feb 25 | Computer | Data Base Management System | Lec -06 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/Vl7KcFk9w2c"}
+                        ]
+                    },
+                    {
+                        "_id": "69a7e68070b3d4f3cf3b7c59",
+                        "name": "⏺️ Live Class Recording | C Programming | Mr. Anurag Sir",
+                        "sortKey": 4,
+                        "entities": [
+                            {"_id": "30", "name": "Feb 27 | Computer | C Programming | Lec -01 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/BilwlLoTsPI"},
+                            {"_id": "31", "name": "Mar 01 | Computer | C Programming | Lec -02 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/olJ9QN6-aNs"},
+                            {"_id": "32", "name": "Mar 03 | Computer | C Programming | Lec -03 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/M3oNq5eO5ss"},
+                            {"_id": "33", "name": "Mar 04 | Computer | C Programming | Lec -04 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/Q8XPsY1y_mE"},
+                            {"_id": "34", "name": "Mar 05 | Computer| C Programming ( Array and Strings) | Lec -05 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/JVjRMReL2s0"},
+                            {"_id": "35", "name": "Mar 06 | Computer | C programming ( String and function) | Lec -06 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/yZxj0InGVok"},
+                            {"_id": "36", "name": "Mar 07 | Computer | C programming (Function structure & pointer) | Lec -07 | Mr. Anurag Sir", "type": "video", "youtubeURL": "https://youtu.be/nmiIAx-gp9A"}
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const container = document.getElementById('course-container');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+        const timelineData = apiResponse.data.timeline;
+
+        // Function to render the UI
+        function renderPlatform(dataToRender) {
+            container.innerHTML = '';
+            let hasVisibleContent = false;
+
+            dataToRender.forEach(section => {
+                if (section.entities.length === 0) return; // Skip empty sections
+                hasVisibleContent = true;
+
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section-card';
+
+                // Section Header
+                const headerEl = document.createElement('div');
+                headerEl.className = 'section-header';
+                headerEl.innerHTML = `
+                    <span>${section.name}</span>
+                    <span class="chevron">▼</span>
+                `;
+                
+                // Toggle Accordion functionality
+                headerEl.addEventListener('click', () => {
+                    sectionEl.classList.toggle('active');
+                });
+
+                // Section Content (Entities)
+                const contentEl = document.createElement('div');
+                contentEl.className = 'section-content';
+
+                section.entities.forEach(entity => {
+                    const icon = entity.type === 'video' ? '▶️' : '🔗';
+                    const itemEl = document.createElement('a');
+                    itemEl.className = 'entity-item';
+                    itemEl.href = entity.youtubeURL;
+                    itemEl.target = '_blank'; // Opens in new tab
+                    
+                    itemEl.innerHTML = `
+                        <div class="entity-icon">${icon}</div>
+                        <div class="entity-details">
+                            <span class="entity-name">${entity.name}</span>
+                            <span class="entity-type">${entity.type || 'Resource'}</span>
+                        </div>
+                    `;
+                    contentEl.appendChild(itemEl);
+                });
+
+                sectionEl.appendChild(headerEl);
+                sectionEl.appendChild(contentEl);
+                container.appendChild(sectionEl);
+            });
+
+            noResults.style.display = hasVisibleContent ? 'none' : 'block';
+        }
+
+        // Search Functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+
+            const filteredData = timelineData.map(section => {
+                // Filter entities within each section that match the search term
+                const filteredEntities = section.entities.filter(entity => 
+                    entity.name.toLowerCase().includes(searchTerm)
+                );
+                // Return a new section object with only matching entities
+                return { ...section, entities: filteredEntities };
+            }).filter(section => section.entities.length > 0); // Only keep sections with at least one match
+
+            renderPlatform(filteredData);
+
+            // Auto-expand sections if the user is searching
+            if (searchTerm !== '') {
+                document.querySelectorAll('.section-card').forEach(card => card.classList.add('active'));
+            }
+        });
+
+        // Initial render
+        renderPlatform(timelineData);
+    </script>
+</body>
+</html>
